@@ -2,7 +2,7 @@ package gr.aueb.cf.ch7;
 
 import java.util.Scanner;
 
-public class KaisarasApp {
+public class CaesarApp {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
