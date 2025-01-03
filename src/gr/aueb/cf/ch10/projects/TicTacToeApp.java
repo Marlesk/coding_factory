@@ -34,7 +34,6 @@ public class TicTacToeApp {
 
         while (!isWin && turns < 9) {
             System.out.println("Γύρος " + (turns + 1) + ": Παίκτης " + symbol);
-
             System.out.print("Δώσε έναν αριθμό 0 ή 1 ή 2 για τη γραμμή: ");
             x = getValidInputX(in);
             System.out.print("Δώσε έναν αριθμό 0 ή 1 ή 2 για τη στήλη: ");
@@ -138,7 +137,6 @@ public class TicTacToeApp {
             }
             System.out.println();
         }
-
     }
 
     //Μέδοθος για έλεγχο αν κέρδισε κάποιος
@@ -149,23 +147,19 @@ public class TicTacToeApp {
                 return true;
             }
         }
-
         //για στήλη
         for (int i = 0; i < arr.length; i++) {
             if (arr[0][i] == symbol && arr[1][i] == symbol && arr[1][i] == symbol) {
                 return true;
             }
         }
-
         //για διαγώνιους
         if (arr[0][0] == symbol && arr[1][1] == symbol && arr[2][2] == symbol) {
             return true;
         }
-
         if (arr[0][2] == symbol && arr[1][1] == symbol && arr[2][0] == symbol) {
             return true;
         }
-
         return false;
     }
 

@@ -17,64 +17,34 @@ public class TheaterApp {
 
         inputValues(seats);
         printArray(seats);
-
         do {
             printMenu();
             try {
                 choice = scanner.nextInt();
-                if (isValidChoice(choice)) {
+                if (!isValidChoice(choice)) {
                     System.out.println("Λάθος επιλογή! Επιλέξτε μεταξύ του 1-3");
                     continue;
                 }
-
                 if (choice == 3) {
                     System.out.println("Επιλέξατε έξοδο από το μενού επιλογών");
                     break;
                 }
-
-                System.out.println("Δώστε στήλη θέσης (A-L):");
-                String input = scanner.next();
-                column = input.toUpperCase().charAt(0);
-                while (column < 'A' || column > 'L' || input.length() != 1 || !Character.isLetter(input.charAt(0))) {
-                    System.out.println("Λάθος στήλη! Δώστε έναν χαρακτήρα από A έως L.");
-                    input = scanner.next();
-                    column = input.toUpperCase().charAt(0);
-                }
-
-                System.out.println("Δώστε σειρά θέσης (1-12):");
-                while (true) {
-                    try {
-                        row = scanner.nextInt();
-                        if (row >= 1 && row <= 12) {
-                            break;
-                        } else {
-                            System.out.println("Λάθος σειρά! Δώστε έναν αριθμό από 1 έως 12.");
-                        }
-                    } catch (InputMismatchException e) {
-                        System.out.println("Λάθος σειρά! Δώστε έναν αριθμό από 1 έως 12.");
-                        scanner.nextLine();
-                    }
-                }
-
-                choiceMenu(choice, column, row - 1, seats);
-
+               column = seatColumn(scanner);
+               row = seatRow(scanner);
+               choiceMenu(choice, column, row - 1, seats);
             } catch(InputMismatchException e) {
                 System.out.println("Λάθος αριθμός! Δώστε έναν αριθμό από 1 έως 3.");
                 scanner.nextLine();
             }
-
             printArray(seats);
-
         } while (true);
-
         System.out.println("Ευχαριστούμε για την προτίμησή σας");
-
     }
 
     //Αρχικοποίηση πίνακα
     public static void inputValues(boolean[][] seats) {
-        for (int i = 1; i < seats.length; i++) {
-            for (int j = 1; j < seats[i].length; j++) {
+        for (int i = 0; i < seats.length; i++) {
+            for (int j = 0; j < seats[i].length; j++) {
                 seats[i][j] = false;
             }
         }
@@ -91,9 +61,9 @@ public class TheaterApp {
     //Έλεγχος επιλογής χρήστη από το μενού επιλογών
     public static boolean isValidChoice(int choice) {
         if (choice <= 0 || choice > 3) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     //Εκτύπωση του πίνακα θέσεων του θεάτρου
@@ -105,12 +75,48 @@ public class TheaterApp {
             }
             System.out.println();
         }
-
     }
 
-    //Για κλείσιμο θέσης
+    //Επιλογή στήλης
+    public static char seatColumn(Scanner scanner) {
+        char column = ' ';
+
+        System.out.println("Δώστε στήλη θέσης (A-L):");
+        String input = scanner.next();
+        column = input.toUpperCase().charAt(0);
+        while (column < 'A' || column > 'L' || input.length() != 1 || !Character.isLetter(input.charAt(0))) {
+            System.out.println("Λάθος στήλη! Δώστε έναν χαρακτήρα από A έως L.");
+            input = scanner.next();
+            column = input.toUpperCase().charAt(0);
+        }
+        return column;
+    }
+
+    //Επιλογή σειράς
+    public static int seatRow(Scanner scanner) {
+        int row = 0;
+
+        System.out.println("Δώστε σειρά θέσης (1-12):");
+        while (true) {
+            try {
+                row = scanner.nextInt();
+                if (row >= 1 && row <= 12) {
+                    break;
+                } else {
+                    System.out.println("Λάθος σειρά! Δώστε έναν αριθμό από 1 έως 12.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Λάθος σειρά! Δώστε έναν αριθμό από 1 έως 12.");
+                scanner.nextLine();
+            }
+        }
+        return row;
+    }
+
+    //Για κράτηση θέσης
     public static void book(char column, int row, boolean[][] seats) {
         int col = (int) column - 65;
+
         if (seats[col][row] == false) {
             seats[col][row] = true;
             System.out.printf("Η θέση %c%d κρατήθηκε \n", column, row+1);
@@ -122,13 +128,13 @@ public class TheaterApp {
     //Για ακύρωση θέσης
     public static void cancel(char column, int row, boolean[][] seats) {
         int col = (int) column - 65;
+
         if (seats[col][row] == true) {
             seats[col][row] = false;
             System.out.printf("Η κράτηση για την θέση %c%d ακυρώθηκε \n", column, row+1);
         } else {
             System.out.printf("Η κράτηση για την θέση %c%d δεν μπορεί να ακυρωθεί γιατί δεν είναι κρατημένη. \n", column, row+1);
         }
-
     }
 
     //Ανάλογα με την επιλογή του χρήστη εκτελεί και την αντίστοιχη διαδικασία
